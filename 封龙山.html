@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b1d17">
+<title>封龙山研学之旅 · 寻访千年书院</title>
+<style>
+/* ============ 基础 ============ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{
+  font-size:clamp(14px,4vw,19.2px);
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+}
+:root{
+  --ink:#12261f;
+  --deep:#0b1d17;
+  --green:#1d4d3f;
+  --jade:#2f7a63;
+  --gold:#d3a95a;
+  --gold-d:#b8903f;
+  --cream:#f6f1e5;
+  --paper:#fbf8f1;
+  --serif:"Songti SC","STSong","SimSun",Georgia,serif;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:#08120f;color:var(--ink);overflow-x:hidden;
+}
+#app{
+  max-width:480px;margin:0 auto;background:var(--paper);
+  position:relative;overflow:hidden;
+  box-shadow:0 0 60px rgba(0,0,0,.55);
+  padding-bottom:5rem;
+}
+
+/* ============ 顶部进度条 ============ */
+.progress{
+  position:fixed;top:0;left:50%;transform:translateX(-50%);
+  width:min(100%,480px);height:2px;z-index:60;
+}
+.progress i{
+  display:block;height:100%;width:100%;
+  background:linear-gradient(90deg,var(--jade),var(--gold));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .1s linear;
+}
+
+/* ============ 滚动动画 ============ */
+.reveal{
+  opacity:0;transform:translateY(1.6rem);
+  transition:opacity .75s cubic-bezier(.2,.8,.3,1),transform .75s cubic-bezier(.2,.8,.3,1);
+}
+.reveal.in{opacity:1;transform:none;}
+
+/* ============ 首屏 ============ */
+.hero{
+  position:relative;height:100vh;height:100dvh;min-height:560px;
+  background:linear-gradient(180deg,#eef4ee 0%,#dbe8e0 42%,#c4d8cd 72%,#b3cabe 100%);
+  overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;
+}
+.hero .sun{
+  position:absolute;top:12%;left:50%;transform:translateX(-50%);
+  width:7.4rem;height:7.4rem;border-radius:50%;
+  background:radial-gradient(circle,#f9e0ae 0%,#ecc684 42%,rgba(236,198,132,0) 72%);
+  opacity:.9;
+}
+.cloud{
+  position:absolute;background:rgba(255,255,255,.8);
+  border-radius:50%;filter:blur(1.1rem);opacity:.7;
+}
+.c1{width:9rem;height:2.4rem;top:22%;left:-3rem;animation:drift 26s linear infinite;}
+.c2{width:6rem;height:1.8rem;top:31%;left:-8rem;animation:drift 34s linear infinite 4s;}
+.c3{width:7.5rem;height:2rem;top:16%;left:60%;animation:drift 30s linear infinite 9s;}
+@keyframes drift{
+  from{transform:translateX(-6rem);}
+  to{transform:translateX(30rem);}
+}
+
+.hero-mtn{
+  position:absolute;left:0;bottom:0;width:100%;height:auto;
+  display:block;
+}
+.hero-inner{
+  position:relative;z-index:5;text-align:center;
+  padding-top:15vh;
+}
+.hero-tag{
+  display:inline-block;
+  font-size:.66rem;letter-spacing:.32em;color:#4e7a68;
+  border:1px solid rgba(78,122,104,.4);
+  padding:.35rem .9rem .35rem 1.2rem;border-radius:2rem;
+  margin-bottom:1.4rem;
+}
+.hero-inner h1{
+  font-family:var(--serif);
+  font-size:3.6rem;letter-spacing:.12em;
+  color:var(--deep);line-height:1.1;
+  text-shadow:0 .15rem .6rem rgba(255,255,255,.7);
+  margin-left:.12em;
+}
+.hero-line{
+  display:flex;align-items:center;justify-content:center;gap:.8rem;
+  margin:1rem 0 .9rem;
+}
+.hero-line i{display:block;width:2.2rem;height:1px;background:var(--gold-d);opacity:.7;}
+.hero-line span{
+  font-family:var(--serif);
+  font-size:1.05rem;letter-spacing:.5em;color:#2c5a49;
+  margin-right:-.5em;
+}
+.hero-inner p{
+  font-size:.78rem;letter-spacing:.14em;color:#4a6b5d;
+}
+.seal{
+  position:absolute;top:2.2rem;right:1.6rem;z-index:6;
+  width:2.7rem;height:2.7rem;border:2px solid #b5432f;border-radius:.22rem;
+  color:#b5432f;font-family:var(--serif);font-size:.72rem;line-height:1.05;
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(-6deg);opacity:.85;
+}
+.seal span{writing-mode:vertical-rl;letter-spacing:.08em;}
+
+.scroll-tip{
+  position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);
+  z-index:6;font-size:.62rem;letter-spacing:.22em;color:#3d6656;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  opacity:.9;
+}
+.scroll-tip em{
+  display:block;width:1.1rem;height:1.8rem;border:1px solid #3d6656;
+  border-radius:1rem;position:relative;font-style:normal;
+}
+.scroll-tip em::after{
+  content:"";position:absolute;left:50%;top:.35rem;
+  width:2px;height:.42rem;background:#3d6656;border-radius:2px;
+  transform:translateX(-50%);
+  animation:wheel 1.6s ease-in-out infinite;
+}
+@keyframes wheel{
+  0%{opacity:0;transform:translate(-50%,0);}
+  40%{opacity:1;}
+  100%{opacity:0;transform:translate(-50%,.7rem);}
+}
+
+/* ============ 通用板块 ============ */
+.sec{padding:3.2rem 1.6rem;}
+.sec-head{position:relative;margin-bottom:1.8rem;}
+.sec-num{
+  font-size:.72rem;letter-spacing:.2em;color:var(--gold-d);
+  font-weight:700;font-family:var(--serif);
+}
+.sec-head h2{
+  font-family:var(--serif);
+  font-size:1.62rem;letter-spacing:.08em;color:var(--green);
+  margin-top:.35rem;padding-bottom:.7rem;position:relative;
+}
+.sec-head h2::after{
+  content:"";position:absolute;left:0;bottom:0;
+  width:2.2rem;height:2px;background:var(--gold);border-radius:2px;
+}
+.sec-sub{
+  font-size:.6rem;letter-spacing:.26em;color:#a9b6b0;
+  margin-top:.5rem;text-transform:uppercase;
+}
+
+/* ============ 简介 ============ */
+.intro-text{
+  font-size:.9rem;line-height:2.05;color:#3d5149;
+  text-align:justify;text-indent:2em;
+}
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:.4rem;margin-top:1.7rem;
+  background:linear-gradient(140deg,#1f5445,#143a2f);
+  border-radius:.9rem;padding:1.25rem .5rem;
+  box-shadow:0 .5rem 1.6rem rgba(29,77,63,.22);
+}
+.stat{text-align:center;color:#fff;position:relative;}
+.stat + .stat::before{
+  content:"";position:absolute;left:0;top:18%;height:64%;width:1px;
+  background:rgba(255,255,255,.16);
+}
+.stat b{
+  display:block;font-family:var(--serif);
+  font-size:1.5rem;color:var(--gold);letter-spacing:.02em;
+}
+.stat span{
+  display:block;font-size:.6rem;color:rgba(255,255,255,.66);
+  margin-top:.35rem;letter-spacing:.05em;
+}
+
+/* ============ 行程时间轴 ============ */
+.timeline{padding-top:.4rem;}
+.tl-item{
+  display:grid;grid-template-columns:3.1rem 1.4rem 1fr;
+  padding-bottom:1.5rem;
+}
+.tl-time{
+  font-size:.76rem;font-weight:700;color:var(--gold-d);
+  padding-top:.1rem;letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;
+}
+.tl-axis{position:relative;}
+.tl-axis::before{
+  content:"";position:absolute;left:50%;top:.6rem;bottom:-1.5rem;
+  width:1px;background:#e3dac6;transform:translateX(-50%);
+}
+.tl-item:last-child .tl-axis::before{display:none;}
+.tl-dot{
+  position:absolute;left:50%;top:.35rem;
+  width:.6rem;height:.6rem;border-radius:50%;
+  background:#fff;border:2px solid var(--gold);
+  transform:translateX(-50%);
+  box-shadow:0 0 0 .22rem rgba(211,169,90,.16);
+}
+.tl-item:first-child .tl-dot{background:var(--gold);}
+.tl-body h4{
+  font-size:.92rem;color:var(--green);font-weight:600;letter-spacing:.02em;
+}
+.tl-body p{
+  font-size:.76rem;color:#6d7f77;line-height:1.8;margin-top:.3rem;
+}
+.tl-tag{
+  display:inline-block;font-size:.6rem;color:var(--gold-d);
+  background:rgba(211,169,90,.14);
+  padding:.14rem .55rem;border-radius:1rem;margin-top:.5rem;
+  letter-spacing:.05em;
+}
+
+/* ============ 课程亮点 ============ */
+.sec-highlight{background:#f3efe4;}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.card{
+  background:#fff;border:1px solid #eee6d3;border-radius:.85rem;
+  padding:1.1rem .9rem;position:relative;overflow:hidden;
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.card::before{
+  content:"";position:absolute;top:-1.4rem;right:-1.4rem;
+  width:3.4rem;height:3.4rem;border-radius:50%;
+  background:rgba(211,169,90,.09);
+}
+.card-icon{
+  width:2.15rem;height:2.15rem;border-radius:.55rem;
+  background:linear-gradient(135deg,#1d4d3f,#2f7a63);
+  color:var(--gold);font-family:var(--serif);font-size:1.05rem;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:.7rem;
+}
+.card h4{font-size:.86rem;color:var(--green);letter-spacing:.02em;}
+.card p{font-size:.7rem;color:#85938c;line-height:1.75;margin-top:.35rem;}
+.cards .card:nth-child(1){transition-delay:0s;}
+.cards .card:nth-child(2){transition-delay:.09s;}
+.cards .card:nth-child(3){transition-delay:.18s;}
+.cards .card:nth-child(4){transition-delay:.27s;}
+
+/* ============ 行前须知 ============ */
+.notes{list-style:none;margin-top:.2rem;}
+.notes li{
+  display:flex;gap:.6rem;
+  font-size:.8rem;color:#4d5f57;line-height:1.75;
+  padding:.6rem 0;border-bottom:1px dashed #eee6d3;
+}
+.notes li:last-child{border-bottom:none;}
+.notes li i{
+  font-style:normal;color:var(--jade);font-weight:700;flex:none;
+}
+
+/* ============ 报名 ============ */
+.signup{
+  background:var(--deep);
+  padding:3rem 1.6rem 3.4rem;
+}
+.signup-box{
+  background:linear-gradient(160deg,#16382e 0%,#0e2620 100%);
+  border:1px solid rgba(211,169,90,.3);
+  border-radius:1rem;padding:1.6rem 1.3rem;
+  position:relative;overflow:hidden;
+}
+.signup-box::after{
+  content:"";position:absolute;top:-3rem;right:-3rem;
+  width:8rem;height:8rem;border-radius:50%;
+  background:radial-gradient(circle,rgba(211,169,90,.22),transparent 70%);
+}
+.sb-badge{
+  display:inline-block;font-size:.6rem;letter-spacing:.16em;
+  color:#0e2620;background:var(--gold);
+  padding:.22rem .7rem;border-radius:1rem;font-weight:700;
+}
+.signup-box h3{
+  font-family:var(--serif);font-size:1.35rem;color:#fff;
+  margin-top:.8rem;letter-spacing:.06em;
+}
+.sb-desc{
+  font-size:.7rem;color:rgba(255,255,255,.5);
+  margin-top:.5rem;letter-spacing:.04em;
+}
+.sb-row{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin:1.2rem 0 1.3rem;
+  padding-bottom:1.2rem;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.sb-price{
+  font-family:var(--serif);font-size:2.1rem;color:var(--gold);
+  line-height:1;letter-spacing:.02em;
+}
+.sb-price i{font-size:1rem;font-style:normal;margin-right:.1rem;}
+.sb-price small{
+  font-size:.72rem;color:rgba(255,255,255,.5);
+  font-family:inherit;margin-left:.2rem;
+}
+.sb-meta{
+  font-size:.66rem;color:rgba(255,255,255,.55);
+  text-align:right;line-height:1.7;
+}
+.btn-primary{
+  display:block;width:100%;border:none;cursor:pointer;
+  background:linear-gradient(90deg,#d3a95a,#e8c884);
+  color:#3a2a08;font-size:.95rem;font-weight:700;
+  letter-spacing:.16em;padding:.85rem 0;border-radius:2rem;
+  font-family:inherit;
+  box-shadow:0 .4rem 1.2rem rgba(211,169,90,.28);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.btn-primary:active{
+  transform:scale(.97);
+  box-shadow:0 .2rem .6rem rgba(211,169,90,.24);
+}
+.sb-tip{
+  font-size:.62rem;color:rgba(255,255,255,.4);
+  text-align:center;margin-top:.9rem;line-height:1.7;
+}
+
+/* ============ 底部悬浮条 ============ */
+.dock{
+  position:fixed;left:50%;bottom:0;z-index:50;
+  transform:translate(-50%,130%);
+  width:min(100%,480px);
+  display:flex;align-items:center;justify-content:space-between;gap:.9rem;
+  padding:.65rem 1rem calc(.65rem + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid #eee6d3;
+  transition:transform .4s cubic-bezier(.2,.8,.3,1);
+}
+.dock.show{transform:translate(-50%,0);}
+.dock-info b{
+  font-family:var(--serif);font-size:1.3rem;color:var(--green);
+  line-height:1.1;display:block;
+}
+.dock-info b small{font-size:.65rem;color:#9aa8a1;font-family:inherit;}
+.dock-info span{
+  display:block;font-size:.58rem;color:#9aa8a1;
+  margin-top:.15rem;letter-spacing:.02em;
+}
+.dock-btn{
+  border:none;cursor:pointer;font-family:inherit;
+  background:linear-gradient(90deg,#1d4d3f,#2f7a63);
+  color:#fff;font-size:.86rem;font-weight:600;
+  letter-spacing:.1em;padding:.68rem 1.6rem;border-radius:2rem;
+  transition:transform .18s ease;
+}
+.dock-btn:active{transform:scale(.96);}
+
+/* ============ 提示 ============ */
+.toast{
+  position:fixed;left:50%;bottom:24%;z-index:99;
+  transform:translate(-50%,1rem);
+  background:rgba(11,29,23,.93);color:#fff;
+  font-size:.76rem;letter-spacing:.04em;
+  padding:.72rem 1.2rem;border-radius:2rem;
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .35s,transform .35s;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+</style>
+</head>
+<body>
+
+<!-- 顶部阅读进度 -->
+<div class="progress"><i id="bar"></i></div>
+
+<div id="app">
+
+  <!-- ========== 首屏 ========== -->
+  <section class="hero">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+
+    <div class="seal"><span>封龙山</span></div>
+
+    <div class="hero-inner">
+      <div class="hero-tag">石家庄 · 元氏 · 封龙山</div>
+      <h1>封龙山</h1>
+      <div class="hero-line"><i></i><span>研学之旅</span><i></i></div>
+      <p>寻访千年书院 · 探秘汉碑石窟</p>
+    </div>
+
+    <!-- 山峦 -->
+    <svg class="hero-mtn" viewBox="0 0 375 300" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,180 L40,120 L75,155 L115,95 L155,145 L195,110 L240,160 L285,115 L330,155 L375,125 L375,300 L0,300 Z"
+            fill="#4b8b76" opacity=".38"/>
+      <path d="M0,225 L45,185 L90,215 L135,170 L185,215 L235,178 L285,218 L330,185 L375,220 L375,300 L0,300 Z"
+            fill="#2a6552" opacity=".72"/>
+      <path d="M0,265 L50,235 L100,258 L150,228 L205,258 L255,232 L310,260 L375,238 L375,300 L0,300 Z"
+            fill="#12362b"/>
+    </svg>
+
+    <div class="scroll-tip">
+      <em></em>
+      下滑开启旅程
+    </div>
+  </section>
+
+  <!-- ========== 01 为什么是封龙山 ========== -->
+  <section class="sec intro">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2>山不在高，有仙则名</h2>
+      <p class="sec-sub">Why Fenglong Mountain</p>
+    </div>
+
+    <p class="intro-text reveal">
+      封龙山位于石家庄西南，主峰海拔 812 米，自古为河北名山。山中封龙书院始建于汉代，
+      元代数学家李冶曾在此讲学著书，创立"天元术"，被后世誉为"古代数学的活化石"；
+      山间汉碑、石窟造像、摩崖石刻星罗棋布，一步一景，一石一史，是一部立体的历史教科书。
+    </p>
+
+    <div class="stats reveal">
+      <div class="stat"><b>812</b><span>主峰海拔 / 米</span></div>
+      <div class="stat"><b>2000+</b><span>书院文脉 / 年</span></div>
+      <div class="stat"><b>8</b><span>研学站点 / 个</span></div>
+    </div>
+  </section>
+
+  <!-- ========== 02 行程路线 ========== -->
+  <section class="sec route">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2>一日研学路线</h2>
+      <p class="sec-sub">One Day Itinerary</p>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-time">08:00</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>集合出发</h4>
+          <p>校门口集合点名，乘车前往封龙山，车上开展破冰与行前课堂。</p>
+          <span class="tl-tag">学校门口</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">09:00</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>山门 · 开营仪式</h4>
+          <p>领取研学手册与任务卡，分组编队，宣读登山安全守则。</p>
+          <span class="tl-tag">封龙山山门</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">09:40</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>封龙书院 · 天元术数学课</h4>
+          <p>走进李冶讲学故地，用竹筹摆一摆"天元术"，理解一元高次方程的古代智慧。</p>
+          <span class="tl-tag">封龙书院</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">11:00</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>汉碑亭 · 拓片体验</h4>
+          <p>观摩《封龙山碑》，亲手完成一张拓片，感受汉隶的方整与雄浑。</p>
+          <span class="tl-tag">汉碑亭</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">12:00</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>山间午餐 · 休整</h4>
+          <p>山林野餐，开展"我眼中的封龙山"速写小任务。</p>
+          <span class="tl-tag">半山平台</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">13:30</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>石窟探秘 · 千佛洞</h4>
+          <p>观察造像的衣纹与神态，完成"寻找最美微笑"的观察任务卡。</p>
+          <span class="tl-tag">封龙山石窟</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">15:00</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>药王庙 · 中草药辨识</h4>
+          <p>跟随导师辨识常见山野草药，学习"药食同源"的朴素智慧。</p>
+          <span class="tl-tag">药王庙</span>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-time">16:00</div>
+        <div class="tl-axis"><span class="tl-dot"></span></div>
+        <div class="tl-body">
+          <h4>登顶 · 结营仪式</h4>
+          <p>山顶合影，分享研学成果，颁发研学证书，安全返程。</p>
+          <span class="tl-tag">主峰观景台</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== 03 课程亮点 ========== -->
+  <section class="sec sec-highlight">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2>四大主题课程</h2>
+      <p class="sec-sub">Course Highlights</p>
+    </div>
+
+    <div class="cards">
+      <div class="card reveal">
+        <div class="card-icon">数</div>
+        <h4>天元术数学课</h4>
+        <p>复原元代数学家李冶的解题思路，动手摆筹，把抽象方程变具体。</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">书</div>
+        <h4>汉碑拓片体验</h4>
+        <p>从清洗碑面到上纸捶拓，完整流程亲手做，作品可带回家。</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">石</div>
+        <h4>石窟艺术赏析</h4>
+        <p>对比不同朝代造像风格，学会用眼睛"读"石头上的历史。</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">药</div>
+        <h4>山野自然课堂</h4>
+        <p>辨识常见中草药与山体植被，建立对自然的第一手认知。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 04 行前须知 ========== -->
+  <section class="sec">
+    <div class="sec-head reveal">
+      <span class="sec-num">04</span>
+      <h2>行前须知</h2>
+      <p class="sec-sub">Before You Go</p>
+    </div>
+
+    <ul class="notes">
+      <li class="reveal"><i>✓</i><span>请穿舒适运动鞋，山区台阶较多，建议携带登山杖。</span></li>
+      <li class="reveal"><i>✓</i><span>自备饮用水（不少于 1000ml）、遮阳帽及雨具。</span></li>
+      <li class="reveal"><i>✓</i><span>全程听从带队老师安排，不擅自离队、不攀爬未开放区域。</span></li>
+      <li class="reveal"><i>✓</i><span>爱护文物与山林环境，垃圾随身带走，做文明研学人。</span></li>
+      <li class="reveal"><i>✓</i><span>如遇恶劣天气，活动将顺延并提前一天通知。</span></li>
+    </ul>
+  </section>
+
+  <!-- ========== 报名 ========== -->
+  <section class="sec signup">
+    <div class="signup-box reveal">
+      <div class="sb-badge">春季 · 限额招募</div>
+      <h3>封龙山研学一日营</h3>
+      <p class="sb-desc">千年书院 · 汉碑拓印 · 石窟探秘 · 山野课堂</p>
+
+      <div class="sb-row">
+        <div class="sb-price"><i>¥</i>198<small>/人</small></div>
+        <div class="sb-meta">20 人成团<br>适合 3—9 年级</div>
+      </div>
+
+      <button class="btn-primary" id="signupBtn">立 即 报 名</button>
+      <p class="sb-tip">费用含往返交通、景区门票、保险、午餐及研学材料</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- 底部悬浮条 -->
+<div class="dock" id="dock">
+  <div class="dock-info">
+    <b>¥198<small> /人</small></b>
+    <span>含车费 · 门票 · 保险 · 午餐</span>
+  </div>
+  <button class="dock-btn" id="joinBtn">立即报名</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 滚动渐入 ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    // 老旧机型兜底
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------- 顶部进度条 + 底部悬浮条 ---------- */
+  var bar = document.getElementById('bar');
+  var dock = document.getElementById('dock');
+  var ticking = false;
+
+  function onScroll() {
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    var p = docH > 0 ? Math.min(y / docH, 1) : 0;
+    bar.style.transform = 'scaleX(' + p + ')';
+
+    if (y > window.innerHeight * 0.6) {
+      dock.classList.add('show');
+    } else {
+      dock.classList.remove('show');
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(onScroll);
+    }
+  }, { passive: true });
+
+  onScroll();
+
+  /* ---------- 轻提示 ---------- */
+  var toastTimer = null;
+  function toast(msg) {
+    var old = document.querySelector('.toast');
+    if (old) old.remove();
+    if (toastTimer) clearTimeout(toastTimer);
+
+    var t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { t.classList.add('show'); });
+    });
+
+    toastTimer = setTimeout(function () {
+      t.classList.remove('show');
+      setTimeout(function () { t.remove(); }, 400);
+    }, 2200);
+  }
+
+  /* ---------- 按钮交互 ---------- */
+  document.getElementById('joinBtn').addEventListener('click', function () {
+    document.querySelector('.signup').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  document.getElementById('signupBtn').addEventListener('click', function () {
+    toast('报名意向已提交，老师将尽快与您联系 ✦');
+  });
+
+})();
+</script>
+</body>
+</html>
